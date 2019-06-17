@@ -20,21 +20,21 @@ Fortunately, the API server is already done. You will need to grab on the requir
 Well, grap your guns, stock up your food and bring down your armor. We gonna need it for tonight!  
 **Here are the tasks you must complete:**
 
-- [ ] Complete the application according to the design (image above).
-- [ ] Complete these features that are not in the design (you have freedom to design and position to display).
+- [x] Complete the application according to the design (image above).
+- [x] Complete these features that are not in the design (you have freedom to design and position to display).
   - Display all donation amount.
   - Display a message when paid.
-- [ ] Make the donation feature works correctly.
+- [x] Make the donation feature works correctly.
   - Amount in all donations should be displayed correctly despite users close and come back later.
   - Database (db.json) should have the new valid data when paid.
-- [ ] Refactor the code to be more readable and enhance reusability.
-- [ ] Use only [styled-component](https://www.styled-components.com/) for styling part.
-- [ ] Write a nice commit message and order it well.
-- [ ] Display well in most modern browser (Google Chrome, Safari, Firefox).
+- [x] Refactor the code to be more readable and enhance reusability.
+- [x] Use only [styled-component](https://www.styled-components.com/) for styling part.
+- [x] Write a nice commit message and order it well.
+- [x] Display well in most modern browser (Google Chrome, Safari, Firefox).
 
 #### Bonus
-- [ ] Supporting different screen sizes (responsive).
-- [ ] Write helpers or components unit tests with [jest](https://facebook.github.io/jest/).
+- [x] Supporting different screen sizes (responsive).
+- [x] Write helpers or components unit tests with [jest](https://facebook.github.io/jest/).
 
 ## Rules
 Desire to win the war? Well, to make it a little more fun, please remember that
@@ -65,3 +65,12 @@ Please remember that your patch must consist of multiple separate commits. Your 
 If you notice more bugs in the original implementation you can add fixes for those as well. You won't be penalized if you don't. However we ask you not to add more features than the one given in the mission list.
 
 Let's rock! :metal:
+
+## Installation and run app
+
+1.  Make sure that you have Node.js v10.9 and npm v6.2.0 or above installed.
+2.  Clone this repo using `git clone --depth=1 https://github.com/DuyBui1993/react-challenge.git <YOUR_PROJECT_NAME>`
+3.  Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
+4.  Run `yarn install` in order to install dependencies.<br />
+5.  Run `npm run server` to start the json server at `http://localhost:3001`.
+6.  At this point you can run `npm start` to see the example app at `http://localhost:3000`._
