@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require('path')
 
 const config = {
   entry: './src/index.js',
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: 'build',
+    publicPath: 'build'
   },
 
   devtool: 'inline-source-map',
@@ -16,7 +16,7 @@ const config = {
     port: 3000,
     historyApiFallback: true,
     disableHostCheck: true,
-    contentBase: 'public',
+    contentBase: 'public'
   },
 
   module: {
@@ -25,11 +25,11 @@ const config = {
         test: /\.js$/,
         exclude: [/node_modules/],
         use: {
-          loader: 'babel-loader',
-        },
-      },
-    ],
-  },
-};
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  }
+}
 
-module.exports = config;
+module.exports = config
