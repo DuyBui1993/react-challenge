@@ -4,10 +4,31 @@ import styled from 'styled-components'
 import fetch from 'isomorphic-fetch'
 
 import { summaryDonations } from './helpers'
+import Card from './components/Card'
+import Payment from './components/Payment'
 
-const Card = styled.div`
-  margin: 10px;
-  border: 1px solid #ccc;
+const CardContainer = styled.div`
+  display: block;
+  @media (max-width: 919px) {
+    text-align: center;
+  }
+`
+
+const HeaderText = styled.div`
+text-align: center;
+h1 {
+  color: #5f85db;
+}
+p {
+  color: #90b8f8;
+}
+
+.message {
+  color: red;
+  margin: 1em 0;
+  font-weight: bold;
+  font-size: 16px;
+}
 `
 
 export default connect((state) => state)(
@@ -41,43 +62,32 @@ export default connect((state) => state)(
 
     render () {
       const self = this
+      const { donate, message } = this.props
       const cards = this.state.charities.map(function (item, i) {
         const payments = [10, 20, 50, 100, 500].map((amount, j) => (
-          <label key={j}>
-            <input
-              type='radio'
-              name='payment'
-              onClick={function () {
-                self.setState({ selectedAmount: amount })
-              }} /> {amount}
-          </label>
+          <Payment key={j} amount={amount} selectAmount={(selected) => self.setState({ selectedAmount: selected })} />
         ))
 
         return (
-          <Card key={i}>
-            <p>{item.name}</p>
-            {payments}
-            <button onClick={handlePay.call(self, item.id, self.state.selectedAmount, item.currency)}>Pay</button>
-          </Card>
+          <Card
+            key={i}
+            item={item}
+            handlePay={handlePay}
+            selectedAmount={self.state.selectedAmount}
+            payments={payments}
+          />
         )
       })
-
-      const style = {
-        color: 'red',
-        margin: '1em 0',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        textAlign: 'center'
-      }
-      const donate = this.props.donate
-      const message = this.props.message
-
       return (
         <div>
-          <h1>Tamboon React</h1>
-          <p>All donations: {donate}</p>
-          <p style={style}>{message}</p>
-          {cards}
+          <HeaderText>
+            <h1>Tamboon React</h1>
+            <p>All donations: {donate}</p>
+            <p className='message'>{message}</p>
+          </HeaderText>
+          <CardContainer>
+            {cards}
+          </CardContainer>
         </div>
       )
     }
