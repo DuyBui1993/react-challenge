@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Config } from '../common'
 import Button from './Button'
+import Message from './Message'
 
 const CardHeader = styled.img`
   width: 100%;
@@ -57,7 +58,7 @@ const Content = styled.div`
 
 class Card extends React.Component {
   constructor (props) {
-    super()
+    super(props)
     this.state = {
       isDonating: false
     }
@@ -65,7 +66,7 @@ class Card extends React.Component {
 
   render () {
     const { payments, item, handlePay, currency } = this.props
-    const { image, name } = item
+    const { image, name, message, messageType } = item
     const { isDonating } = this.state
     return (
       <div className={this.props.className}>
@@ -83,9 +84,9 @@ class Card extends React.Component {
             <div>
               {payments}
             </div>
+            {message && <Message type={messageType}>{message}</Message>}
             <Button onClick={e => {
               handlePay(e)
-              this.setState({ isDonating: false })
             }}>Pay</Button>
           </Content>
         </Backdrop>

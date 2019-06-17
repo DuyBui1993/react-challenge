@@ -17,7 +17,8 @@ const store = createStore(function (state, action) {
       })
     case 'UPDATE_MESSAGE':
       return Object.assign({}, _state, {
-        message: action.message
+        message: action.message,
+        messageType: action.messageType
       })
 
     default: return _state

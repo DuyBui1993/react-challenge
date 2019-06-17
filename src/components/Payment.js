@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { currencyFormat } from '../helpers'
 
-const Payment = ({ className, amount, selectAmount, currency }) => (
+const Payment = ({ className, amount, selectAmount, currency, charityName }) => (
   <label className={className} >
     <input
       type='radio'
-      name='payment'
+      required
+      name={`payment-${charityName}`}
       onClick={function () {
         selectAmount(amount)
       }} /> {currencyFormat(amount, currency)}
