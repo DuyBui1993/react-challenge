@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { Config } from '../common'
 import Button from './Button'
 
 const CardHeader = styled.img`
@@ -20,7 +21,7 @@ const CardFooter = styled.footer`
 
 const CharityName = styled.span`
   color: #586675;
-  font-family: Arial;
+  font-family: 'Roboto', sans-serif;
 `
 
 const Backdrop = styled.div`
@@ -38,18 +39,19 @@ const Backdrop = styled.div`
 `
 
 const CloseButton = styled.span`
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #5d5d5d;
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
   cursor: pointer;
 `
 
 const Content = styled.div`
   text-align: center;
   line-height: 2;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #5d5d5d;
 `
 
@@ -62,12 +64,12 @@ class Card extends React.Component {
   }
 
   render () {
-    const { payments } = this.props
-    const { image, name } = this.props.item
+    const { payments, item, handlePay, currency } = this.props
+    const { image, name } = item
     const { isDonating } = this.state
     return (
-      <div className={this.props.className} >
-        <CardHeader src={`http://localhost:3001/images/${image}`} />
+      <div className={this.props.className}>
+        <CardHeader src={`${Config.SERVER_URL}/images/${image}`} />
         <CardFooter>
           <CharityName>{name}</CharityName>
           <Button onClick={() => this.setState({ isDonating: true })}>Donate</Button>
@@ -76,12 +78,15 @@ class Card extends React.Component {
           <CloseButton onClick={() => this.setState({ isDonating: false })}>x</CloseButton>
           <Content>
             <div>
-              Select the amount to donate (USD)
+              Select the amount to donate ({currency})
             </div>
             <div>
               {payments}
             </div>
-            <Button>Pay</Button>
+            <Button onClick={e => {
+              handlePay(e)
+              this.setState({ isDonating: false })
+            }}>Pay</Button>
           </Content>
         </Backdrop>
       </div>

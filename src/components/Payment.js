@@ -1,14 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Payment = ({ className, amount, selectAmount }) => (
+import { currencyFormat } from '../helpers'
+
+const Payment = ({ className, amount, selectAmount, currency }) => (
   <label className={className} >
     <input
       type='radio'
       name='payment'
       onClick={function () {
         selectAmount(amount)
-      }} /> {amount}
+      }} /> {currencyFormat(amount, currency)}
   </label>
 )
 

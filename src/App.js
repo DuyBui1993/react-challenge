@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import fetch from 'isomorphic-fetch'
 
-import { summaryDonations } from './helpers'
+import { summaryDonations, currencyFormat } from './helpers'
+import { Config } from './common'
 import Card from './components/Card'
 import Payment from './components/Payment'
 
@@ -24,7 +25,7 @@ p {
 }
 
 .message {
-  color: red;
+  color: #4BB543;
   margin: 1em 0;
   font-weight: bold;
   font-size: 16px;
@@ -38,19 +39,20 @@ export default connect((state) => state)(
 
       this.state = {
         charities: [],
-        selectedAmount: 10
+        selectedAmount: 10,
+        currency: 'THB'
       }
     }
 
     componentDidMount () {
       const self = this
-      fetch('http://localhost:3001/charities')
+      fetch(`${Config.SERVER_URL}/charities`)
         .then(function (resp) { return resp.json() })
         .then(function (data) {
           self.setState({ charities: data })
         })
 
-      fetch('http://localhost:3001/payments')
+      fetch(`${Config.SERVER_URL}/payments`)
         .then(function (resp) { return resp.json() })
         .then(function (data) {
           self.props.dispatch({
@@ -60,19 +62,54 @@ export default connect((state) => state)(
         })
     }
 
+    _handlePay (id, amount, currency) {
+      const self = this
+      fetch(`${Config.SERVER_URL}/payments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          charitiesId: id,
+          amount,
+          currency
+        })
+      })
+        .then(function (resp) { return resp.json() })
+        .then(function () {
+          self.props.dispatch({
+            type: 'UPDATE_TOTAL_DONATE',
+            amount
+          })
+          self.props.dispatch({
+            type: 'UPDATE_MESSAGE',
+            message: `Thanks for donate ${currencyFormat(amount, currency)}!`
+          })
+
+          setTimeout(function () {
+            self.props.dispatch({
+              type: 'UPDATE_MESSAGE',
+              message: ''
+            })
+          }, 2000)
+        })
+    }
+
     render () {
       const self = this
-      const { donate, message } = this.props
+      const { donate, message } = self.props
+      const { currency, selectedAmount } = self.state
       const cards = this.state.charities.map(function (item, i) {
         const payments = [10, 20, 50, 100, 500].map((amount, j) => (
-          <Payment key={j} amount={amount} selectAmount={(selected) => self.setState({ selectedAmount: selected })} />
+          <Payment key={j} currency={currency} amount={amount} selectAmount={(selected) => self.setState({ selectedAmount: selected })} />
         ))
 
         return (
           <Card
             key={i}
             item={item}
-            handlePay={handlePay}
+            currency={self.state.currency}
+            handlePay={() => self._handlePay(item.id, selectedAmount, currency)}
             selectedAmount={self.state.selectedAmount}
             payments={payments}
           />
@@ -82,7 +119,7 @@ export default connect((state) => state)(
         <div>
           <HeaderText>
             <h1>Tamboon React</h1>
-            <p>All donations: {donate}</p>
+            <p>All donations: {currencyFormat(donate, currency)}</p>
             <p className='message'>{message}</p>
           </HeaderText>
           <CardContainer>
@@ -93,31 +130,3 @@ export default connect((state) => state)(
     }
   }
 )
-
-function handlePay (id, amount, currency) {
-  const self = this
-  return function () {
-    fetch('http://localhost:3001/payments', {
-      method: 'POST',
-      body: `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`
-    })
-      .then(function (resp) { return resp.json() })
-      .then(function () {
-        self.props.dispatch({
-          type: 'UPDATE_TOTAL_DONATE',
-          amount
-        })
-        self.props.dispatch({
-          type: 'UPDATE_MESSAGE',
-          message: `Thanks for donate ${amount}!`
-        })
-
-        setTimeout(function () {
-          self.props.dispatch({
-            type: 'UPDATE_MESSAGE',
-            message: ''
-          })
-        }, 2000)
-      })
-  }
-}
